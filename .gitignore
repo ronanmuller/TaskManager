@@ -1,0 +1,18 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/.cr/personal/FavoritesList
+/src/TaskManager.Api/bin/Debug/net8.0
+/src/TaskManager.Application/bin/Debug/net8.0
+/src/TaskManager.Api/obj/Debug/net8.0
+/src/TaskManager.Api/obj/Release/net8.0
+/src/TaskManager.Api/obj
+/src/TaskManager.Application/obj
+/src/TaskManager.Domain/bin/Debug/net8.0
+/src/TaskManager.Domain/obj
+/src/TaskManager.Infrastructure/bin/Debug/net8.0
+/src/TaskManager.Infrastructure/obj
+/tests/TaskManager.Tests/bin/Debug/net8.0
+/tests/TaskManager.Tests/obj
