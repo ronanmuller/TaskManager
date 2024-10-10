@@ -3,8 +3,10 @@ using TaskManager.Application.Dto;
 
 namespace TaskManager.Application.MediatorR.Queries.Projects
 {
-    public class GetProjectsByUserIdQuery(int userId) : IRequest<IEnumerable<ProjectDto>>
+    public class GetProjectsByUserIdQuery(int userId, int skip, int take) : IRequest<IEnumerable<ProjectDto>>
     {
         public int UserId { get; private set; } = userId;
+        public int Skip { get; private set; } = skip;
+        public int Take { get; private set; } = take;
     }
 }

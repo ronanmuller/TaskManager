@@ -5,7 +5,8 @@ namespace TaskManager.Domain.Enums
     {
         Pending,
         InProgress,
-        Completed
+        Completed, 
+        Canceled
     }
 
 }

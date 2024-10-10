@@ -7,59 +7,47 @@ using TaskManager.Application.Dto;
 
 namespace TaskManager.Application.Services
 {
-    public class ProjectService : IProjectService
+    public class ProjectService(
+        IProjectRepository projectRepository,
+        ITaskRepository taskRepository,
+        ILogger<ProjectService> logger,
+        IMapper mapper)
+        : IProjectService
     {
-        private readonly IProjectRepository _projectRepository;
-        private readonly ITaskRepository _taskRepository;
-        private readonly ILogger<ProjectService> _logger;
-        private readonly IMapper _mapper;
-
-        public ProjectService(IProjectRepository projectRepository, ITaskRepository taskRepository, ILogger<ProjectService> logger, IMapper mapper) 
+        public async Task<IEnumerable<ProjectDto>> GetProjectsByUserIdAsync(int userId, int skip, int take)
         {
-            _projectRepository = projectRepository;
-            _taskRepository = taskRepository;
-            _logger = logger;
-            _mapper = mapper; 
-        }
-
-        public async Task<IEnumerable<ProjectDto>> GetProjectsByUserIdAsync(int userId)
-        {
-            _logger.LogInformation("Buscando projetos para o usuário de ID {userId}.", userId);
-
-            var projects = await _projectRepository.GetProjectsByUserIdAsync(userId);
-            var projectDtos = _mapper.Map<IEnumerable<ProjectDto>>(projects); 
+            logger.LogInformation("Buscando projetos para o usuário de ID {userId}.", userId);
+            var projects = await projectRepository.GetProjectsByUserIdAsync(userId, skip, take);
+            var projectDtos = mapper.Map<IEnumerable<ProjectDto>>(projects); 
 
             return projectDtos;
         }
 
-        public async Task<ProjectDto> CreateProjectAsync(ProjectDto projectDto)
+        public async Task<ProjectDto> CreateProjectAsync(CreateProjectDto createProjectDto)
         {
-            _logger.LogInformation("Criando novo projeto: {projectName}", projectDto.Name);
+            logger.LogInformation("Criando novo projeto: {projectName}", createProjectDto.Name);
+            var project = mapper.Map<Project>(createProjectDto); 
+            await projectRepository.AddAsync(project);
+            logger.LogInformation("Projeto {projectName} criado com sucesso.", project.Name);
+            var createdProjectDto = mapper.Map<ProjectDto>(project); 
 
-            var project = _mapper.Map<Project>(projectDto); 
-            await _projectRepository.AddAsync(project);
-
-            _logger.LogInformation("Projeto {projectName} criado com sucesso.", projectDto.Name);
-
-            var createdProjectDto = _mapper.Map<ProjectDto>(project); 
             return createdProjectDto;
         }
 
         public async Task DeleteProjectAsync(int projectId)
         {
-            _logger.LogInformation("Iniciando a exclusão do projeto de ID {projectId}", projectId);
+            logger.LogInformation("Iniciando a exclusão do projeto de ID {projectId}", projectId);
 
-            if (await _taskRepository.HasPendingTasksAsync(projectId))
+            if (await taskRepository.HasPendingTasksAsync(projectId))
             {
-                _logger.LogWarning("Tentativa de excluir o projeto {projectId}, mas há tarefas pendentes.", projectId);
-
-                throw new InvalidOperationException
+                logger.LogWarning("Tentativa de excluir o projeto {projectId}, mas há tarefas pendentes.", projectId);
+                throw new UnauthorizedAccessException
                     ("Não é possível excluir um projeto com tarefas pendentes. Conclua as tarefas pendentes e repita a operação.");
             }
 
-            await _projectRepository.DeleteAsync(projectId);
+            await projectRepository.DeleteLogicalProjectsByIdAsync(projectId);
 
-            _logger.LogInformation("Projeto {projectId} excluído com sucesso.", projectId);
+            logger.LogInformation("Projeto {projectId} excluído com sucesso.", projectId);
         }
     }
 }

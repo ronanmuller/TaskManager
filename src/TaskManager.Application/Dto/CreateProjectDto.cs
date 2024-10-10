@@ -1,10 +1,10 @@
 ﻿namespace TaskManager.Application.Dto
 {
-    public record ProjectDto
+    public record CreateProjectDto
     {
-        public int Id { get; init; }
         public string Name { get; init; } = string.Empty;
         public int UserId { get; init; }
     }
+
 
 }

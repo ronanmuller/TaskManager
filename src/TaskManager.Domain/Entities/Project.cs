@@ -3,8 +3,9 @@
     public class Project
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int UserId { get; set; }
-        public ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
+        public bool IsDeleted { get; set; } = false;
+        public ICollection<Tasks> Tasks { get; set; } = new List<Tasks>();
     }
 }

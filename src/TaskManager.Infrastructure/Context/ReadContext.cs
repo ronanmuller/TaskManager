@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManager.Domain.Entities;
-using TaskManager.Infrastructure.Configuration;
 
 namespace TaskManager.Infrastructure.Context
 {
@@ -8,13 +7,14 @@ namespace TaskManager.Infrastructure.Context
     {
         public DbSet<Project> Projects { get; set; }
         public DbSet<Tasks> Tasks { get; set; }
-        public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<Updates> Updates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
             modelBuilder.ApplyConfiguration(new TasksConfiguration());
-            modelBuilder.ApplyConfiguration(new ProjectTaskConfiguration());
+            modelBuilder.ApplyConfiguration(new UpdatesConfiguration());
+
         }
     }
 

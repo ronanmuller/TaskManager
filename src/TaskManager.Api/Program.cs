@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Api.Mapping;
 using TaskManager.Infrastructure.Context;
@@ -6,7 +7,7 @@ using TaskManager.Application.Services;
 using TaskManager.Application.Services.Interfaces;
 using TaskManager.Infrastructure.Repositories;
 using TaskManager.Domain.Interfaces.Repositories;
-using TaskManager.Application.MediatorR.Handlers.Projects;
+using TaskManager.Application.MediatorR.Commands.Projects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,17 +21,23 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddControllers();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
+    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProjectCommand).Assembly));
+    services.AddControllers().AddFluentValidation(fv => { fv.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()); });
+
+    string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
     services.AddDbContext<ReadContext>(options =>
-        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlServer(connectionString));
 
     services.AddDbContext<WriteContext>(options =>
-        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlServer(connectionString));
 
     services.AddAutoMapper(typeof(MappingProfile));
 
+    services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+
     // Injeção de dependência dos repositórios
-    services.AddScoped<IProjectTaskRepository, ProjectTaskRepository>();
+    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
     services.AddScoped<IProjectRepository, ProjectRepository>();
     services.AddScoped<ITaskRepository, TaskRepository>();
 
@@ -38,11 +45,10 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<IProjectService, ProjectService>();
     services.AddScoped<ITaskService, TaskService>();
 
-    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProjectCommandHandler).Assembly));
 
     services.AddHealthChecks()
-        .AddDbContextCheck<ReadContext>() // Verifica a saúde do ReadContext
-        .AddDbContextCheck<WriteContext>(); // Verifica a saúde do WriteContext
+        .AddDbContextCheck<ReadContext>()
+        .AddDbContextCheck<WriteContext>();
 }
 
 void Configure(WebApplication app)

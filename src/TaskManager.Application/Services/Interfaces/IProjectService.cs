@@ -4,9 +4,9 @@ namespace TaskManager.Application.Services.Interfaces
 {
     public interface IProjectService
     {
-        Task<IEnumerable<ProjectDto>> GetProjectsByUserIdAsync(int userId);
+        Task<IEnumerable<ProjectDto>> GetProjectsByUserIdAsync(int userId, int skip, int take);
 
-        Task<ProjectDto> CreateProjectAsync(ProjectDto project);
+        Task<ProjectDto> CreateProjectAsync(CreateProjectDto project);
 
         Task DeleteProjectAsync(int projectId);
     }

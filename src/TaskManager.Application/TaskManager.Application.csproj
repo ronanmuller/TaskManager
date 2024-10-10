@@ -16,10 +16,4 @@
     <ProjectReference Include="..\TaskManager.Domain\TaskManager.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MediatorR\Commands\Tasks\" />
-    <Folder Include="MediatorR\Handlers\Tasks\" />
-    <Folder Include="MediatorR\Queries\Tasks\" />
-  </ItemGroup>
-
 </Project>
