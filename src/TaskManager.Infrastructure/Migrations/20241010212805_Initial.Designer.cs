@@ -12,7 +12,7 @@ using TaskManager.Infrastructure.Context;
 namespace TaskManager.Infrastructure.Migrations
 {
     [DbContext(typeof(ReadContext))]
-    [Migration("20241010003011_Initial")]
+    [Migration("20241010212805_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -33,6 +33,9 @@ namespace TaskManager.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -44,6 +47,35 @@ namespace TaskManager.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Projects", (string)null);
+                });
+
+            modelBuilder.Entity("TaskManager.Domain.Entities.TaskUpdateHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateDetail")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TaskUpdateHistory", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Domain.Entities.Tasks", b =>
@@ -83,31 +115,15 @@ namespace TaskManager.Infrastructure.Migrations
                     b.ToTable("Tasks", (string)null);
                 });
 
-            modelBuilder.Entity("TaskManager.Domain.Entities.Updates", b =>
+            modelBuilder.Entity("TaskManager.Domain.Entities.TaskUpdateHistory", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("TaskManager.Domain.Entities.Tasks", "Task")
+                        .WithMany("UpdateHistories")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdateDetail")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Updates", (string)null);
+                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("TaskManager.Domain.Entities.Tasks", b =>
@@ -122,6 +138,11 @@ namespace TaskManager.Infrastructure.Migrations
             modelBuilder.Entity("TaskManager.Domain.Entities.Project", b =>
                 {
                     b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("TaskManager.Domain.Entities.Tasks", b =>
+                {
+                    b.Navigation("UpdateHistories");
                 });
 #pragma warning restore 612, 618
         }

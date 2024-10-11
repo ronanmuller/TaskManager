@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TaskManager.Domain.Entities;
 
+namespace TaskManager.Infrastructure.Configuration;
+
 public class ProjectConfiguration : IEntityTypeConfiguration<Project>
 {
     public void Configure(EntityTypeBuilder<Project> builder)
@@ -16,10 +18,9 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(p => p.UserId)
             .IsRequired();
 
-        // Configurar o relacionamento com a entidade Tasks
-        builder.HasMany(p => p.Tasks) // Relacionamento "um para muitos"
+        builder.HasMany(p => p.Tasks) 
             .WithOne() 
-            .HasForeignKey("ProjectId") // Adiciona a chave estrangeira em Tasks
-            .OnDelete(DeleteBehavior.Cascade); // Cascata de deleção
+            .HasForeignKey("ProjectId") 
+            .OnDelete(DeleteBehavior.Restrict);  //Assumi a exclusao logica entao nao tem cascade
     }
 }

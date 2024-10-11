@@ -8,8 +8,8 @@ namespace TaskManager.Application.Dto
         public string Title { get; init; } = string.Empty;
         public string Description { get; init; } = string.Empty;
         public DateTime DueDate { get; init; }
-        public TaskState Status { get; init; } // Enum para o status da tarefa
-        public TaskPriority Priority { get; init; } // Assume que você já tem o enum TaskPriority
+        public TaskState Status { get; set; }
+        public TaskPriority Priority { get; init; } 
     }
 
 }

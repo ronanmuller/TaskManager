@@ -5,22 +5,16 @@ using TaskManager.Infrastructure.Context;
 
 namespace TaskManager.Infrastructure.Repositories
 {
-    public class ProjectRepository : Repository<Project>, IProjectRepository
+    public class ProjectRepository(ReadContext readContext, WriteContext writeContext)
+        : Repository<Project>(writeContext, readContext), IProjectRepository
     {
-        private readonly ReadContext _readContext;
-        private readonly WriteContext _writeContext;
-
-        public ProjectRepository(ReadContext readContext, WriteContext writeContext)
-            : base(writeContext, readContext)
-        {
-            _readContext = readContext;
-            _writeContext = writeContext;
-        }
+        private readonly ReadContext _readContext = readContext;
+        private readonly WriteContext _writeContext = writeContext;
 
         public async Task<IEnumerable<Project>> GetProjectsByUserIdAsync(int userId, int skip, int take)
         {
             return await _readContext.Projects
-                .Where(p => p.UserId == userId && p.IsDeleted == false)
+                .Where(p => p.UserId == userId && !p.IsDeleted) // Verifique se o projeto não está excluído
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
@@ -28,17 +22,13 @@ namespace TaskManager.Infrastructure.Repositories
 
         public async Task DeleteLogicalProjectsByIdAsync(int projectId)
         {
-            var project = await _readContext.Projects.AsNoTracking().FirstOrDefaultAsync(p => p.Id == projectId);
+            var project = await _writeContext.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
 
             if (project == null)
             {
                 throw new KeyNotFoundException("Projeto não encontrado para exclusão.");
             }
 
-            // Anexa o projeto ao _writeContext para que ele possa ser modificado
-            _writeContext.Projects.Attach(project);
-
-            // Marca o projeto como excluído
             project.IsDeleted = true;
 
             await _writeContext.SaveChangesAsync();
@@ -46,7 +36,7 @@ namespace TaskManager.Infrastructure.Repositories
 
         public async Task<bool> ExistsAsync(int projectId)
         {
-            return await _readContext.Projects.AnyAsync(p => p.Id == projectId);
+            return await _readContext.Projects.AnyAsync(p => p.Id == projectId && !p.IsDeleted); 
         }
     }
 }

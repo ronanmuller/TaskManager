@@ -8,49 +8,84 @@ using TaskManager.Application.Services.Interfaces;
 using TaskManager.Infrastructure.Repositories;
 using TaskManager.Domain.Interfaces.Repositories;
 using TaskManager.Application.MediatorR.Commands.Projects;
+using TaskManager.Infrastructure.Repositories.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
+
 Configure(app);
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
-    services.AddControllers();
+    // Adiciona controladores, documentação e validação
+    services.AddControllers(options =>
+    {
+      
+    })
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
+
+    // Configura o MediatR
     services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProjectCommand).Assembly));
-    services.AddControllers().AddFluentValidation(fv => { fv.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()); });
 
-    string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+    // Obtém a connection string do ambiente
+    var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+                           ?? throw new KeyNotFoundException("Connection string não informada.");
 
-    services.AddDbContext<ReadContext>(options =>
-        options.UseSqlServer(connectionString));
+    // Configura os DbContexts
+    services.AddDbContext<ReadContext>(options => options.UseSqlServer(connectionString));
+    services.AddDbContext<WriteContext>(options => options.UseSqlServer(connectionString));
 
-    services.AddDbContext<WriteContext>(options =>
-        options.UseSqlServer(connectionString));
-
+    // Configura AutoMapper
     services.AddAutoMapper(typeof(MappingProfile));
 
-    services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+    // Registra repositórios
+    RegisterRepositories(services);
 
-    // Injeção de dependência dos repositórios
+    // Registra serviços
+    RegisterServices(services);
+
+    // Registra o Accessor de HttpContext
+    services.AddHttpContextAccessor();
+
+    // Configura Health Checks
+    services.AddHealthChecks()
+            .AddDbContextCheck<ReadContext>()
+            .AddDbContextCheck<WriteContext>();
+
+    // Configura a autorização
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager"));
+    });
+}
+
+// Método para registrar repositórios
+void RegisterRepositories(IServiceCollection services)
+{
     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
     services.AddScoped<IProjectRepository, ProjectRepository>();
     services.AddScoped<ITaskRepository, TaskRepository>();
-
-    // Injeção de dependência dos serviços
-    services.AddScoped<IProjectService, ProjectService>();
-    services.AddScoped<ITaskService, TaskService>();
-
-
-    services.AddHealthChecks()
-        .AddDbContextCheck<ReadContext>()
-        .AddDbContextCheck<WriteContext>();
+    services.AddScoped<ITaskUpdateHistoryRepository, TaskUpdateHistoryRepository>();
+    services.AddScoped<IReportRepository, ReportRepository>();
+    services.AddScoped<IUnitOfWork, UnitOfWork>();
 }
 
+// Método para registrar serviços
+void RegisterServices(IServiceCollection services)
+{
+    services.AddScoped<IProjectService, ProjectService>();
+    services.AddScoped<ITaskService, TaskService>();
+    services.AddScoped<IUserService, UserService>();
+    services.AddScoped<IReportService, ReportService>();
+}
+
+// Método para configurar o pipeline da aplicação
 void Configure(WebApplication app)
 {
     if (app.Environment.IsDevelopment())
@@ -61,8 +96,12 @@ void Configure(WebApplication app)
 
     app.UseHttpsRedirection();
     app.UseRouting();
+
+    // Adiciona o middleware para simular roles antes da autorização
+    app.UseMiddleware<RoleSimulationMiddleware>();
+
     app.UseAuthorization();
-    app.UseMiddleware<ExceptionMiddleware>();
+    app.UseMiddleware<ExceptionMiddleware>(); // Middleware para tratamento de exceções
 
     app.MapControllers();
     app.MapHealthChecks("/health");

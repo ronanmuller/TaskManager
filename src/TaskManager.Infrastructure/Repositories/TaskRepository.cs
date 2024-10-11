@@ -6,7 +6,8 @@ using TaskManager.Infrastructure.Context;
 
 namespace TaskManager.Infrastructure.Repositories
 {
-    public class TaskRepository(ReadContext readContext, WriteContext writeContext) : Repository<Tasks>(writeContext, readContext), ITaskRepository
+    public class TaskRepository(ReadContext readContext, WriteContext writeContext) 
+        : Repository<Tasks>(writeContext, readContext), ITaskRepository
     {
         private readonly ReadContext _readContext = readContext;
         private readonly WriteContext _writeContext = writeContext;
