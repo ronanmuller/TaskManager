@@ -1,17 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=14196fea_002D5c2d_002D4885_002Da562_002D1d82077327c1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ProjectServiceTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.ApplicationTests.ServicesTests.ProjectServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.ApplicationTests.ServicesTests.ReportServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.ApplicationTests.ServicesTests.TaskCommentServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Application.Tests.Services.TaskServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.ApplicationTests.ServicesTests.TaskServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.InfrastructureTests.Repositories.ProjectRepositoryTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.Infrastructure.Repositories.ReportRepositoryTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.InfrastructureTests.Repositories.TaskCommentRepositoryTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::E49E4F6F-3B0A-4CB1-B9FD-F2DEBE7E171C::net8.0::TaskManager.Tests.InfrastructureTests.Repositories.TaskRepositoryTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d58f74e6_002D5cb9_002D4307_002Db78b_002De1965253d5e8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d58f74e6_002D5cb9_002D4307_002Db78b_002De1965253d5e8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Users\Usuario\source\repos\TaskManager" Presentation="&amp;lt;tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
