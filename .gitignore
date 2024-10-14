@@ -16,3 +16,7 @@
 /src/TaskManager.Infrastructure/obj
 /tests/TaskManager.Tests/bin/Debug/net8.0
 /tests/TaskManager.Tests/obj
+/src/TaskManager.Domain/bin/Release/net8.0
+/src/TaskManager.Api/bin/Release/net8.0
+/src/TaskManager.Infrastructure/bin/Release/net8.0
+/src/TaskManager.Application/bin/Release/net8.0
