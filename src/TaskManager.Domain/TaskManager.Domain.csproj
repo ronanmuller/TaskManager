@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ExcludeFromCodeCoverage Include="**/*.cs" />
+  </ItemGroup>
+
 </Project>

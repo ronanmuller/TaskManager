@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using TaskManager.Domain.Interfaces.Repositories;
 using TaskManager.Infrastructure.Context;
 
 namespace TaskManager.Infrastructure.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly WriteContext _writeContext;

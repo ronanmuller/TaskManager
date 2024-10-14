@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using TaskManager.Infrastructure.Context;
 
-namespace GE.SpreadSheet.Data
+namespace TaskManager.Infrastructure.Context
 {
+    [ExcludeFromCodeCoverage]
     public class DbContextFactory : IDesignTimeDbContextFactory<ReadContext>
     {
         public ReadContext CreateDbContext(string[] args)
@@ -16,7 +17,7 @@ namespace GE.SpreadSheet.Data
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Carregar o arquivo appsettings.json
                 .Build();
 
-           string connectionString = configuration.GetConnectionString("DefaultConnection");
+           string connectionString = configuration.GetConnectionString("ConnectionStrings__DefaultConnection");
             //string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
             if (string.IsNullOrEmpty(connectionString))

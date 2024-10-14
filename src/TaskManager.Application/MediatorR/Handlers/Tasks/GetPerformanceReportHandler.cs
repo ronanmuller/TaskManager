@@ -11,9 +11,14 @@ public class GetPerformanceReportHandler(IReportService reportService, IMapper m
 {
     public async Task<IEnumerable<TaskReportDto>> Handle(GetPerformanceReportQuery request, CancellationToken cancellationToken)
     {
-        var tasks = await reportService.GetPerformanceReportAsync(request.AverageDays);
+        var tasks = await reportService.GetPerformanceReportAsync(
+            request.DateFrom,
+            request.DateTo,
+            request.UserId,
+            request.Skip,
+            request.Take
+        );
 
-        // Cria a visão de relatorio para o retorno
         return mapper.Map<IEnumerable<TaskReportDto>>(tasks);
     }
 }

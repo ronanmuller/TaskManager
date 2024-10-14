@@ -5,7 +5,10 @@ namespace TaskManager.Application.Services.Interfaces
 {
     public interface IReportService
     {
-        Task<IEnumerable<TaskReportDto>> GetPerformanceReportAsync(int averageDays);
-        IEnumerable<TaskReportDto> GenerateTaskReport(IEnumerable<Tasks> tasks);
+        Task<IEnumerable<TaskReportDto>> GetPerformanceReportAsync(string dateFrom, string dateTo, int? userId,
+            int skip, int take);
+
+        Task<IEnumerable<TaskReportDto>> GenerateTaskReportAsync(IQueryable<Tasks> tasks, string dateFrom,
+            string dateTo, int skip, int take);
     }
 }

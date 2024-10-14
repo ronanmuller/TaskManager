@@ -1,8 +1,9 @@
 ﻿using TaskManager.Domain.Entities;
 
-namespace TaskManager.Domain.Interfaces.Repositories;
-
-public interface IReportRepository
+namespace TaskManager.Domain.Interfaces.Repositories
 {
-    Task<IEnumerable<Tasks>> GetTasksReportAsync(int averageDays);
+    public interface IReportRepository
+    {
+        Task<IQueryable<Tasks>> GetTasksReportAsync(DateTime dateFrom, DateTime dateTo, int? userId);
+    }
 }

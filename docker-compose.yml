@@ -1,0 +1,39 @@
+services:
+  taskmanager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"  # Mapeia a porta 80 do container para a porta 5000 do host
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development  # Define o ambiente para desenvolvimento
+      - ConnectionStrings__DefaultConnection=Server=db;Database=TaskManagerDB;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;
+    networks:
+      - taskmanager_network
+    depends_on:
+      - db  # Define que este serviço depende do banco de dados
+    command: >
+      /bin/bash -c "
+      dotnet ef database update && 
+      dotnet TaskManager.Api.dll
+      "
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest  # Imagem do SQL Server
+    restart: always
+    environment:
+      - SA_PASSWORD=YourPassword123  # Define a senha do usuário 'sa'
+      - ACCEPT_EULA=Y  # Aceita o EULA do SQL Server
+    ports:
+      - "1433:1433"  # Mapeia a porta do SQL Server
+    volumes:
+      - db_data:/var/opt/mssql  # Volume para persistir dados do banco
+    networks:
+      - taskmanager_network
+
+networks:
+  taskmanager_network:
+    driver: bridge
+
+volumes:
+  db_data:  # Definindo um volume para o banco de dados

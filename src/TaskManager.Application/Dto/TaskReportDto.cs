@@ -6,8 +6,9 @@ namespace TaskManager.Application.Dto
     {
         public string Status { get; init; } = "Completed";
         public int UserId { get; init; }
-        public double AverageTasksPerUser { get; set; }
-        public DateTime CompletionDate { get; set; }
+        public double CountTasksPerUser { get; set; }
+        public string InitDate { get; set; }
+        public string EndDate { get; set; }
 
     }
 }

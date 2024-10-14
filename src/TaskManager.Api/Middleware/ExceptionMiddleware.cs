@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace TaskManager.Api.Middleware
 {
+
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;

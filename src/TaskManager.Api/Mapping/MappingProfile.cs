@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using TaskManager.Application.Dto;
 using TaskManager.Domain.Entities;
-using TaskManager.Domain.Enums;
 
 namespace TaskManager.Api.Mapping
 {
@@ -23,9 +22,13 @@ namespace TaskManager.Api.Mapping
                 .ForMember(dest => dest.Project, opt => opt.Ignore()); // Project será associado via ProjectId
 
             CreateMap<Tasks, TaskReportDto>()
-                .ForMember(dest => dest.CompletionDate, opt => opt.MapFrom(src => src.DueDate)) 
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Project.UserId))
                 .ReverseMap();
+
+            CreateMap<TaskComment, TaskCommentDto>()
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Comment)) 
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt)) 
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId)); //
 
         }
     }

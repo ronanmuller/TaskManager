@@ -46,6 +46,37 @@ namespace TaskManager.Infrastructure.Migrations
                     b.ToTable("Projects", (string)null);
                 });
 
+            modelBuilder.Entity("TaskManager.Domain.Entities.TaskComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TaskComments");
+                });
+
             modelBuilder.Entity("TaskManager.Domain.Entities.TaskUpdateHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +143,17 @@ namespace TaskManager.Infrastructure.Migrations
                     b.ToTable("Tasks", (string)null);
                 });
 
+            modelBuilder.Entity("TaskManager.Domain.Entities.TaskComment", b =>
+                {
+                    b.HasOne("TaskManager.Domain.Entities.Tasks", "Task")
+                        .WithMany("Comments")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+                });
+
             modelBuilder.Entity("TaskManager.Domain.Entities.TaskUpdateHistory", b =>
                 {
                     b.HasOne("TaskManager.Domain.Entities.Tasks", "Task")
@@ -141,6 +183,8 @@ namespace TaskManager.Infrastructure.Migrations
 
             modelBuilder.Entity("TaskManager.Domain.Entities.Tasks", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("UpdateHistories");
                 });
 #pragma warning restore 612, 618

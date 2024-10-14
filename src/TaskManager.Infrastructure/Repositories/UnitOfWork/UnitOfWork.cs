@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using System.Diagnostics.CodeAnalysis;
 using TaskManager.Domain.Interfaces.Repositories;
 using TaskManager.Infrastructure.Context;
 
 namespace TaskManager.Infrastructure.Repositories.UnitOfWork
 {
+    [ExcludeFromCodeCoverage]
     public class UnitOfWork(WriteContext writeContext, ReadContext readContext) : IUnitOfWork
     {
         private IDbContextTransaction? _transaction;

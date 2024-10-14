@@ -1,7 +1,9 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 
 namespace TaskManager.Api.Middleware;
 
+[ExcludeFromCodeCoverage]
 public class RoleSimulationMiddleware
 {
     private readonly RequestDelegate _next;

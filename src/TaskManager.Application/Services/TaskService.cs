@@ -10,10 +10,9 @@ namespace TaskManager.Application.Services
     public class TaskService(
         ITaskRepository taskRepository,
         IProjectRepository projectRepository,
-        ITaskUpdateHistoryRepository taskUpdateHistoryRepository,
         IUserService userService,
-        IMapper mapper, IUnitOfWork unitOfWork)
-        : ITaskService
+        IMapper mapper,
+        IUnitOfWork unitOfWork) : ITaskService
     {
         public async Task<TaskDto> CreateTaskAsync(CreateTaskDto createTaskDto)
         {
@@ -43,8 +42,7 @@ namespace TaskManager.Application.Services
 
         public async Task<TaskDto> UpdateTaskAsync(int taskId, UpdateTaskDto updateTaskDto)
         {
-            // Estou usando o unit of work aqui para garantir que so teremos um registro de update se ele realmente acontecer
-            await unitOfWork.BeginTransactionAsync(); 
+            await unitOfWork.BeginTransactionAsync();
 
             try
             {
@@ -84,11 +82,10 @@ namespace TaskManager.Application.Services
             }
             catch
             {
-                await unitOfWork.RollbackAsync(); // Reverte os updates em caso de qulquer erro
-                throw; 
+                await unitOfWork.RollbackAsync(); // Reverte os updates em caso de qualquer erro
+                throw;
             }
         }
-
 
         [ExcludeFromCodeCoverage]
         private string GetUpdateDetails(Tasks task, UpdateTaskDto updateTaskDto)

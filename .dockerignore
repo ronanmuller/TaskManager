@@ -1,0 +1,33 @@
+# Ignora arquivos e diretórios específicos do ambiente de desenvolvimento
+**/.classpath
+**/.env
+**/.git
+**/.gitignore
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.vscode
+**/*.dbmdl
+**/*.jfm
+**/azds.yaml
+
+# Ignora arquivos de projeto
+**/*.*proj.user
+
+# Ignora diretórios de build e dependências
+**/bin
+**/obj
+**/charts
+**/node_modules
+
+# Ignora arquivos de log
+**/npm-debug.log
+
+# Ignora arquivos de configuração de segredo
+**/secrets.dev.yaml
+**/values.dev.yaml
+
+# Ignora arquivos de licença e documentação
+LICENSE
+README.md

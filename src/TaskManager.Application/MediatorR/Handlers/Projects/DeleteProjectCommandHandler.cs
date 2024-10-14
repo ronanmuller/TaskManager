@@ -4,11 +4,18 @@ using TaskManager.Application.Services.Interfaces;
 
 namespace TaskManager.Application.MediatorR.Handlers.Projects
 {
-    public class DeleteProjectCommandHandler(IProjectService projectService) : IRequestHandler<DeleteProjectCommand>
+    public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand>
     {
+        private readonly IProjectService _projectService;
+
+        public DeleteProjectCommandHandler(IProjectService projectService)
+        {
+            _projectService = projectService;
+        }
+
         public async Task Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
-            await projectService.DeleteProjectAsync(request.ProjectId);
+            await _projectService.DeleteProjectAsync(request.ProjectId);
         }
     }
 }

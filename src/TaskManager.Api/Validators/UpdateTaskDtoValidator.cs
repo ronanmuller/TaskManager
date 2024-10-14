@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using TaskManager.Application.Dto;
 
+namespace TaskManager.Api.Validators;
+
 public class UpdateTaskDtoValidator : AbstractValidator<UpdateTaskDto>
 {
     public UpdateTaskDtoValidator()

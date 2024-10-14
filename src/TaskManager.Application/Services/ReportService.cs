@@ -8,48 +8,49 @@ using TaskManager.Domain.Interfaces.Repositories;
 
 namespace TaskManager.Application.Services
 {
-    public class ReportService : IReportService
+    public class ReportService(IReportRepository reportRepository, IMapper mapper) : IReportService
     {
-        private readonly IReportRepository _reportRepository;
-        private readonly IMapper _mapper;
+        private readonly IReportRepository _reportRepository = reportRepository ?? throw new ArgumentNullException(nameof(reportRepository));
+        private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
-        public ReportService(IReportRepository reportRepository, IMapper mapper)
+        public async Task<IEnumerable<TaskReportDto>> GetPerformanceReportAsync(string dateFrom, string dateTo, int? userId, int skip, int take)
         {
-            _reportRepository = reportRepository ?? throw new ArgumentNullException(nameof(reportRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        }
-
-        public async Task<IEnumerable<TaskReportDto>> GetPerformanceReportAsync(int averageDays)
-        {
-            if (averageDays <= 0)
+            // Valida e tenta converter as datas fornecidas
+            if (!TryParseDate(dateFrom, out var fromDate) || !TryParseDate(dateTo, out var toDate))
             {
-                throw new ArgumentOutOfRangeException(nameof(averageDays), "O número de dias deve ser maior que zero.");
+                throw new ArgumentException("Datas inválidas fornecidas. Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
             }
 
-            // Obtém as tarefas concluídas no intervalo de dias especificado
-            var tasks = await _reportRepository.GetTasksReportAsync(averageDays);
-            return GenerateTaskReport(tasks);
+            if (fromDate > toDate)
+            {
+                throw new ArgumentException("A data de início não pode ser maior que a data de término.");
+            }
+
+            // Obtém as tarefas com base nos filtros fornecidos
+            var tasks = await _reportRepository.GetTasksReportAsync(fromDate, toDate, userId);
+
+            return await GenerateTaskReportAsync(tasks, dateFrom, dateTo, skip, take);
         }
 
-        public IEnumerable<TaskReportDto> GenerateTaskReport(IEnumerable<Tasks> tasks)
+        public async Task<IEnumerable<TaskReportDto>> GenerateTaskReportAsync(IQueryable<Tasks> tasks, string dateFrom, string dateTo, int skip, int take)
         {
             var taskGroups = tasks
-                .GroupBy(t => t.Project.UserId)
+                .GroupBy(t => t.Project.UserId) // Agrupa as tarefas por UserId
                 .Select(g => new TaskReportDto
                 {
-                    UserId = g.Key,
-                    CompletionDate = DateTime.UtcNow, // Data atual, se necessário; ajuste conforme a lógica do relatório
-                    AverageTasksPerUser = g.Count() // Número total de tarefas por usuário
-                })
-                .ToList();
+                    UserId = g.Key, // O UserId do grupo
+                    CountTasksPerUser = g.Count(), // Número total de tarefas concluídas por usuário
+                    InitDate = dateFrom,
+                    EndDate = dateTo
+                });
 
-            return taskGroups;
+            return await Task.FromResult(taskGroups.Skip(skip).Take(take).ToList());
         }
 
         [ExcludeFromCodeCoverage]
         private static bool TryParseDate(string dateString, out DateTime date)
         {
-            string[] formats = { "dd/MM/yyyy", "MM/dd/yyyy", "yyyy-MM-dd", "yyyy/MM/dd" };
+            string[] formats = ["dd/MM/yyyy", "MM/dd/yyyy", "yyyy-MM-dd", "yyyy/MM/dd"];
             return DateTime.TryParseExact(dateString, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
         }
     }

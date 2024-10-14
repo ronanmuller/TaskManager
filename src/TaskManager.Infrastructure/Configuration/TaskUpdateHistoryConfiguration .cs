@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Diagnostics.CodeAnalysis;
 using TaskManager.Domain.Entities;
 
 namespace TaskManager.Infrastructure.Configuration;
 
+[ExcludeFromCodeCoverage]
 public class TaskUpdateHistoryConfiguration : IEntityTypeConfiguration<TaskUpdateHistory>
 {
     public void Configure(EntityTypeBuilder<TaskUpdateHistory> builder)

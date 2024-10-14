@@ -38,6 +38,11 @@ namespace TaskManager.Application.Services
         {
             logger.LogInformation("Iniciando a exclusão do projeto de ID {projectId}", projectId);
 
+            if (projectId <= 0)
+            {
+                throw new ArgumentException("Project id não pode ser menor ou igual a 0."); 
+            }
+
             if (await taskRepository.HasPendingTasksAsync(projectId))
             {
                 logger.LogWarning("Tentativa de excluir o projeto {projectId}, mas há tarefas pendentes.", projectId);
