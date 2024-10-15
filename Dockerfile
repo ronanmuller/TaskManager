@@ -10,6 +10,7 @@ COPY src/TaskManager.Api/*.csproj ./src/TaskManager.Api/
 COPY src/TaskManager.Application/*.csproj ./src/TaskManager.Application/
 COPY src/TaskManager.Domain/*.csproj ./src/TaskManager.Domain/
 COPY src/TaskManager.Infrastructure/*.csproj ./src/TaskManager.Infrastructure/
+COPY tests/TaskManager.Tests/*.csproj ./tests/TaskManager.Tests/
 
 # Restaura as dependências
 RUN dotnet restore
