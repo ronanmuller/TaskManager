@@ -12,8 +12,8 @@ using TaskManager.Infrastructure.Context;
 namespace TaskManager.Infrastructure.Migrations
 {
     [DbContext(typeof(ReadContext))]
-    [Migration("20241014154800_AddTaskComments")]
-    partial class AddTaskComments
+    [Migration("20241015224506_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
