@@ -34,7 +34,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Define a porta que a aplicação irá escutar
-EXPOSE 80
+EXPOSE 5000
 
 # Define o comando para executar a aplicação
 ENTRYPOINT ["dotnet", "TaskManager.Api.dll"]

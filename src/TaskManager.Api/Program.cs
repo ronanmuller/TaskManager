@@ -12,7 +12,7 @@ using TaskManager.Infrastructure.Repositories.UnitOfWork;
 using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseUrls("http://*:5000");
 ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
@@ -131,7 +131,7 @@ void Configure(WebApplication app)
         app.UseSwaggerUI();
     //}
 
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
     app.UseRouting();
 
     // Adiciona o middleware para simular roles antes da autorização

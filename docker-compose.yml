@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:80"  # Mapeia a porta 80 do container para a porta 5000 do host
+      - "5000:5000"  # Mapeia a porta 80 do container para a porta 5000 do host
     environment:
       - ASPNETCORE_ENVIRONMENT=Development  # Define o ambiente para desenvolvimento
       - ConnectionStrings__DefaultConnection=Server=db;Database=TaskManagerDB;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;
