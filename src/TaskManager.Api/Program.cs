@@ -25,7 +25,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         // Obtém o contexto de escrita
-        var context = services.GetRequiredService<WriteContext>();
+        var context = services.GetRequiredService<ReadContext>();
         context.Database.Migrate(); // Aplica as migrations
     }
     catch (Exception ex)
