@@ -18,23 +18,6 @@ ConfigureServices(builder.Services, builder.Configuration);
 var app = builder.Build();
 
 
-// Aplica as migrations automaticamente ao iniciar
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        // Obtém o contexto de escrita
-        var context = services.GetRequiredService<ReadContext>();
-        context.Database.Migrate(); // Aplica as migrations
-    }
-    catch (Exception ex)
-    {
-        // Log de erros ou qualquer outra ação que você queira fazer em caso de falha
-        Console.WriteLine($"Ocorreu um erro ao migrar o banco de dados: {ex.Message}");
-    }
-}
-
 Configure(app);
 
 [ExcludeFromCodeCoverage]
@@ -135,6 +118,23 @@ void Configure(WebApplication app)
         app.UseSwagger();
         app.UseSwaggerUI();
     //}
+
+    // Aplica as migrations automaticamente ao iniciar
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        try
+        {
+            // Obtém o contexto de escrita
+            var context = services.GetRequiredService<ReadContext>();
+            context.Database.Migrate(); // Aplica as migrations
+        }
+        catch (Exception ex)
+        {
+            // Log de erros ou qualquer outra ação que você queira fazer em caso de falha
+            Console.WriteLine($"Ocorreu um erro ao migrar o banco de dados: {ex.Message}");
+        }
+    }
 
     //app.UseHttpsRedirection();
     app.UseRouting();
