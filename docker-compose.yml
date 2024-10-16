@@ -14,17 +14,7 @@ services:
       - taskmanager_network
     depends_on:
       - db  # Define que este servico depende do banco de dados
-    command: >
-      /bin/bash -c "
-      # Aguarda o banco de dados estar disponivel
-      for i in {1..30}; do
-        /opt/mssql-tools/bin/sqlcmd -S db -U sa -P YourPassword123 -Q 'SELECT 1' && break || echo 'Aguardando o banco de dados...' && sleep 5;
-      done;
-      # Aplica as migracoes
-      dotnet ef database update &&
-      # Inicia a aplicacao
-      dotnet TaskManager.Api.dll
-      "
+    # Removemos o comando aqui, pois o ENTRYPOINT agora esta no Dockerfile
 
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest  # Imagem do SQL Server

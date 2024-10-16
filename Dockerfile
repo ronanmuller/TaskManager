@@ -33,8 +33,14 @@ WORKDIR /app
 # Copia os arquivos compilados da etapa anterior
 COPY --from=build /app/out .
 
+# Copia o arquivo entrypoint.sh e torna-o executavel
+COPY entrypoint.sh .  
+
+# Torna o script executavel
+RUN chmod +x entrypoint.sh
+
 # Define a porta que a aplicacao ira escutar
 EXPOSE 5000
 
-# Define o comando de entrada para aplicar as migracoes e iniciar a aplicacao
-ENTRYPOINT ["/bin/bash", "-c", "dotnet ef database update && dotnet TaskManager.Api.dll"]
+# Comando de entrada para aplicar as migracoes e iniciar a aplicacao
+ENTRYPOINT ["./entrypoint.sh"]
