@@ -57,6 +57,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
                            ?? throw new KeyNotFoundException("Connection string não informada.");
 
+    services.AddDbContext<ReadContext>(options =>
+        options.UseSqlServer(connectionString)
+            .EnableSensitiveDataLogging()
+            .LogTo(Console.WriteLine, LogLevel.Information));
+
     // Configura os DbContexts
     services.AddDbContext<ReadContext>(options => options.UseSqlServer(connectionString));
     services.AddDbContext<WriteContext>(options => options.UseSqlServer(connectionString));

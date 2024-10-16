@@ -3,6 +3,8 @@
 # Remove o banco de dados existente
 dotnet ef database drop --force --context ReadContext
 
+dotnet ef migrations remove --context ReadContext
+
 # Adiciona uma nova migração
 dotnet ef migrations add InitialCreate --context ReadContext
 
