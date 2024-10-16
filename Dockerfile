@@ -18,6 +18,15 @@ RUN dotnet restore
 # Copia o restante dos arquivos da aplicacao
 COPY . .
 
+# Instala o dotnet-ef
+RUN dotnet tool install -g dotnet-ef 
+
+# Adiciona o caminho do dotnet-tools ao PATH
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Verifica a versao do dotnet-ef
+RUN dotnet ef --version
+
 # Compila a aplicacao em modo Release
 RUN dotnet publish src/TaskManager.Api -c Release -o out
 
