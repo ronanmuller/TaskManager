@@ -13,8 +13,15 @@ services:
     depends_on:
       - db  # Define que este serviço depende do banco de dados
     command: >
+     command: >
       /bin/bash -c "
-      dotnet ef database update && 
+      # Aguarda o banco de dados estar disponível
+      for i in {1..30}; do
+        /opt/mssql-tools/bin/sqlcmd -S db -U sa -P YourPassword123 -Q 'SELECT 1' && break || echo 'Aguardando o banco de dados...' && sleep 5;
+      done;
+      # Aplica as migrações
+      dotnet ef database update &&
+      # Inicia a aplicação
       dotnet TaskManager.Api.dll
       "
 
