@@ -33,12 +33,6 @@ WORKDIR /app
 # Copia os arquivos compilados da etapa anterior
 COPY --from=build /app/out .
 
-# Instala o CLI do Entity Framework para aplicar as migracoes
-RUN dotnet tool install --global dotnet-ef
-
-# Adiciona o caminho do dotnet tools para o PATH
-ENV PATH="$PATH:/root/.dotnet/tools"
-
 # Define a porta que a aplicacao ira escutar
 EXPOSE 5000
 
