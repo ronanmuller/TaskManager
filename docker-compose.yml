@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   taskmanager:
     build:
@@ -11,17 +13,16 @@ services:
     networks:
       - taskmanager_network
     depends_on:
-      - db  # Define que este serviço depende do banco de dados
+      - db  # Define que este servico depende do banco de dados
     command: >
-     command: >
       /bin/bash -c "
-      # Aguarda o banco de dados estar disponível
+      # Aguarda o banco de dados estar disponivel
       for i in {1..30}; do
         /opt/mssql-tools/bin/sqlcmd -S db -U sa -P YourPassword123 -Q 'SELECT 1' && break || echo 'Aguardando o banco de dados...' && sleep 5;
       done;
-      # Aplica as migrações
+      # Aplica as migracoes
       dotnet ef database update &&
-      # Inicia a aplicação
+      # Inicia a aplicacao
       dotnet TaskManager.Api.dll
       "
 
@@ -29,7 +30,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest  # Imagem do SQL Server
     restart: always
     environment:
-      - SA_PASSWORD=YourPassword123  # Define a senha do usuário 'sa'
+      - SA_PASSWORD=YourPassword123  # Define a senha do usuario 'sa'
       - ACCEPT_EULA=Y  # Aceita o EULA do SQL Server
     ports:
       - "1433:1433"  # Mapeia a porta do SQL Server
