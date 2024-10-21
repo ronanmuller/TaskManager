@@ -4,7 +4,7 @@ using TaskManager.Application.MediatorR.Commands.Projects;
 using TaskManager.Application.MediatorR.Queries.Projects;
 using TaskManager.Application.Dto;
 
-namespace TaskManager.API.Controllers
+namespace TaskManager.Api.Controllers
 {
     [ApiController]
     [Route("api/projects")]
