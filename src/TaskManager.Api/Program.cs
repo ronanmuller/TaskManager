@@ -35,9 +35,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 
     // Configura o MediatR
     services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProjectCommand).Assembly));
-
-    // Obtém a connection string do ambiente
     var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+                           ?? configuration.GetConnectionString("ConnectionStrings__DefaultConnection")
                            ?? throw new KeyNotFoundException("Connection string não informada.");
 
     services.AddDbContext<ReadContext>(options =>
