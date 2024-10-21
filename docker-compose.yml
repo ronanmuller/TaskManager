@@ -9,11 +9,28 @@ services:
       - "5000:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-
+      - ConnectionStrings__DefaultConnection=Server=db;Database=TaskManagerDataBase;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;
     networks:
       - taskmanager_network
+    restart: always
 
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD:-YourPassword123} 
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express 
+    ports:
+      - "1433:1433"
+    volumes:
+      - db_data:/var/opt/mssql  # Persiste os dados do banco de dados
+    networks:
+      - taskmanager_network
 
 networks:
   taskmanager_network:
     driver: bridge
+
+volumes:
+  db_data:

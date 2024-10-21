@@ -9,12 +9,11 @@ COPY src/TaskManager.Domain/*.csproj ./src/TaskManager.Domain/
 COPY src/TaskManager.Infrastructure/*.csproj ./src/TaskManager.Infrastructure/
 COPY tests/TaskManager.Tests/*.csproj ./tests/TaskManager.Tests/
 
+COPY src/TaskManager.Api/appsettings.json ./src/TaskManager.Api/
+
 RUN dotnet restore
 
 COPY . .
-
-COPY src/TaskManager.Api/appsettings.json ./src/TaskManager.Api/
-
 
 RUN dotnet publish src/TaskManager.Api -c Release -o out
 
