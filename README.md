@@ -103,9 +103,6 @@ A aplicação utiliza o SQL Server como banco de dados. As tabelas principais s�
   - `ProjectId` (int, chave estrangeira para Projects)
   - `CreatedAt` (datetime)
 
-- **ProjectTasks**: Tabela que faz a associação entre projetos e tarefas.
-  - `ProjectId` (int, chave estrangeira)
-  - `TaskId` (int, chave estrangeira)
 
 O banco de dados é configurado automaticamente via Entity Framework migrations ao rodar o comando `dotnet ef database update` durante a execução do Docker Compose.
 
